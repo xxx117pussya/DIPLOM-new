@@ -1,0 +1,318 @@
+/* App-specific styles */
+
+.App {
+    min-height: 100vh;
+}
+
+/* Landing page split screen */
+.landing-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+    .landing-split {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+}
+
+/* Role cards */
+.role-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.role-card.child {
+    background: linear-gradient(135deg, #4FACFE 0%, #00F2FE 100%);
+}
+
+.role-card.psychologist {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.role-card:hover {
+    transform: scale(1.02);
+}
+
+.role-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.role-card:hover::before {
+    opacity: 1;
+}
+
+/* Game grid */
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+@media (min-width: 768px) {
+    .game-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .game-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Background shapes */
+.bg-shapes {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.bg-shape {
+    position: absolute;
+    opacity: 0.1;
+}
+
+.bg-shape.circle {
+    border-radius: 50%;
+}
+
+/* Voice assistant */
+.voice-assistant {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 100;
+}
+
+.voice-avatar {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    border: 4px solid #FFD200;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.voice-avatar:hover {
+    transform: scale(1.1);
+}
+
+.voice-avatar.speaking {
+    animation: pulse-glow 1s infinite;
+}
+
+/* Game container */
+.game-container {
+    min-height: 100vh;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(180deg, #F0F8FF 0%, #E6F3FF 100%);
+}
+
+.game-header {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.game-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 800px;
+}
+
+.game-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    width: 100%;
+}
+
+@media (min-width: 640px) {
+    .game-options.cols-3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .game-options.cols-4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Psychologist dashboard */
+.dashboard-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.dashboard-sidebar {
+    width: 280px;
+    background: white;
+    border-right: 1px solid #e2e8f0;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-main {
+    flex: 1;
+    padding: 2rem;
+    background: #F7FAFC;
+}
+
+.dashboard-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Stats cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Results table */
+.results-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.results-table th {
+    background: #F7FAFC;
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: #4A5568;
+    border-bottom: 2px solid #E2E8F0;
+}
+
+.results-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.results-table tr:hover td {
+    background: #F7FAFC;
+}
+
+/* Puzzle game */
+.puzzle-container {
+    display: grid;
+    gap: 0.5rem;
+    background: #E2E8F0;
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+.puzzle-piece {
+    background: white;
+    border-radius: 0.5rem;
+    cursor: grab;
+    transition: transform 0.2s ease;
+}
+
+.puzzle-piece:active {
+    cursor: grabbing;
+    transform: scale(1.05);
+}
+
+.puzzle-piece.correct {
+    border: 3px solid #48BB78;
+}
+
+/* Matryoshka game */
+.matryoshka-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem;
+    min-height: 300px;
+}
+
+.matryoshka-item {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.matryoshka-item:hover {
+    transform: translateY(-10px);
+}
+
+.matryoshka-item.selected {
+    filter: drop-shadow(0 0 10px #4FACFE);
+}
+
+/* Timer */
+.timer {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #4FACFE;
+    font-family: 'Fredoka', sans-serif;
+}
+
+.timer.warning {
+    color: #FF5858;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
