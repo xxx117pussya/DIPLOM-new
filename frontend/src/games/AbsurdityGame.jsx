@@ -8,42 +8,42 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const rounds = [
   {
     images: [
-      { id: 1, isAbsurd: false, image: '/images/absurd/dog.png' },
-      { id: 2, isAbsurd: false, image: '/images/absurd/cat.png' },
-      { id: 3, isAbsurd: false, image: '/images/absurd/elephant.png' },
-      { id: 4, isAbsurd: false, image: '/images/absurd/lion.png' },
-      { id: 5, isAbsurd: true, image: '/images/absurd/fish_tree.png' },
-      { id: 6, isAbsurd: true, image: '/images/absurd/cow_cloud.png' }
+      { id: 1, isAbsurd: false, image: '/images/absurd/norm_1.png' },
+      { id: 2, isAbsurd: false, image: '/images/absurd/norm_2.png' },
+      { id: 3, isAbsurd: false, image: '/images/absurd/norm_3.png' },
+      { id: 4, isAbsurd: false, image: '/images/absurd/norm_4.png' },
+      { id: 5, isAbsurd: true, image: '/images/absurd/absurd_1.png' },
+      { id: 6, isAbsurd: true, image: '/images/absurd/absurd_2.png' }
     ]
   },
   {
     images: [
-      { id: 1, isAbsurd: false, image: '/images/absurd/house.png' },
-      { id: 2, isAbsurd: false, image: '/images/absurd/school.png' },
-      { id: 3, isAbsurd: false, image: '/images/absurd/hospital.png' },
-      { id: 4, isAbsurd: false, image: '/images/absurd/shop.png' },
-      { id: 5, isAbsurd: true, image: '/images/absurd/house_water.png' },
-      { id: 6, isAbsurd: true, image: '/images/absurd/house_down.png' }
+      { id: 1, isAbsurd: false, image: '/images/absurd/norm_5.png' },
+      { id: 2, isAbsurd: false, image: '/images/absurd/norm_6.png' },
+      { id: 3, isAbsurd: false, image: '/images/absurd/norm_7.png' },
+      { id: 4, isAbsurd: false, image: '/images/absurd/norm_8.png' },
+      { id: 5, isAbsurd: true, image: '/images/absurd/absurd_3.png' },
+      { id: 6, isAbsurd: true, image: '/images/absurd/absurd_4.png' }
     ]
   },
   {
     images: [
-      { id: 1, isAbsurd: false, image: '/images/absurd/man.png' },
-      { id: 2, isAbsurd: false, image: '/images/absurd/woman.png' },
-      { id: 3, isAbsurd: false, image: '/images/absurd/old.png' },
-      { id: 4, isAbsurd: false, image: '/images/absurd/baby.png' },
-      { id: 5, isAbsurd: true, image: '/images/absurd/three_legs.png' },
-      { id: 6, isAbsurd: true, image: '/images/absurd/extra_eyes.png' }
+      { id: 1, isAbsurd: false, image: '/images/absurd/norm_9.png' },
+      { id: 2, isAbsurd: false, image: '/images/absurd/norm_10.png' },
+      { id: 3, isAbsurd: false, image: '/images/absurd/norm_11.png' },
+      { id: 4, isAbsurd: false, image: '/images/absurd/norm_12.png' },
+      { id: 5, isAbsurd: true, image: '/images/absurd/absurd_5.png' },
+      { id: 6, isAbsurd: true, image: '/images/absurd/absurd_6.png' }
     ]
   },
   {
     images: [
-      { id: 1, isAbsurd: false, image: '/images/absurd/car.png' },
-      { id: 2, isAbsurd: false, image: '/images/absurd/bus.png' },
-      { id: 3, isAbsurd: false, image: '/images/absurd/train.png' },
-      { id: 4, isAbsurd: false, image: '/images/absurd/plane.png' },
-      { id: 5, isAbsurd: true, image: '/images/absurd/car_water.png' },
-      { id: 6, isAbsurd: true, image: '/images/absurd/train_cloud.png' }
+      { id: 1, isAbsurd: false, image: '/images/absurd/norm_13.png' },
+      { id: 2, isAbsurd: false, image: '/images/absurd/norm_14.png' },
+      { id: 3, isAbsurd: false, image: '/images/absurd/norm_15.png' },
+      { id: 4, isAbsurd: false, image: '/images/absurd/norm_16.png' },
+      { id: 5, isAbsurd: true, image: '/images/absurd/absurd_7.png' },
+      { id: 6, isAbsurd: true, image: '/images/absurd/absurd_8.png' }
     ]
   }
 ];
