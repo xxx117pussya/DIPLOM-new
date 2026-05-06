@@ -28,7 +28,8 @@ JWT_EXPIRATION_HOURS = 24
 
 security = HTTPBearer()
 
-# Create the main app
+# Psychologist registration code
+PSYCHOLOGIST_CODE = "1100-3245-8888-9012"
 app = FastAPI()
 
 # Create a router with the /api prefix
@@ -53,6 +54,7 @@ class PsychologistCreate(BaseModel):
     login: str
     password: str
     name: str
+    code: str
 
 class PsychologistLogin(BaseModel):
     login: str
@@ -160,6 +162,9 @@ async def get_children():
 
 @api_router.post("/psychologist/register", response_model=dict)
 async def register_psychologist(input: PsychologistCreate):
+    if input.code != PSYCHOLOGIST_CODE:
+        raise HTTPException(status_code=403, detail="Неверный код психолога")
+    
     existing = await db.psychologists.find_one({"login": input.login}, {"_id": 0})
     if existing:
         raise HTTPException(status_code=400, detail="Login already exists")

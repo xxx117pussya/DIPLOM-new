@@ -17,7 +17,8 @@ export default function PsychologistLoginPage() {
   const [formData, setFormData] = useState({
     login: "",
     password: "",
-    name: ""
+    name: "",
+    code: ""
   });
 
   const handleSubmit = async (e) => {
@@ -32,11 +33,17 @@ export default function PsychologistLoginPage() {
           setIsLoading(false);
           return;
         }
+        if (!formData.code.trim()) {
+          toast.error("Введите код психолога");
+          setIsLoading(false);
+          return;
+        }
         
         await axios.post(`${API}/psychologist/register`, {
           login: formData.login,
           password: formData.password,
-          name: formData.name
+          name: formData.name,
+          code: formData.code
         });
         
         toast.success("Регистрация успешна! Теперь войдите в систему.");
@@ -108,6 +115,23 @@ export default function PsychologistLoginPage() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Иванова Мария Петровна"
+                  className="h-12"
+                  required
+                />
+              </div>
+            )}
+
+            {isRegistering && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Код психолога
+                </label>
+                <Input
+                  data-testid="register-code-input"
+                  type="text"
+                  value={formData.code}
+                  onChange={(e) => setFormData({ ...formData, code: e.target.value })}
+                  placeholder="XXXX-XXXX-XXXX-XXXX"
                   className="h-12"
                   required
                 />
