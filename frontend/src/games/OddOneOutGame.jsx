@@ -89,7 +89,7 @@ export default function OddOneOutGame() {
 
   useEffect(() => {
     generateQuestion();
-  }, []);
+  }, [currentQuestion]);
 
   const handleOptionClick = (index) => {
     if (isProcessing) return;
@@ -106,7 +106,6 @@ export default function OddOneOutGame() {
     setTimeout(() => {
       if (currentQuestion + 1 < totalQuestions) {
         setCurrentQuestion(prev => prev + 1);
-        generateQuestion();
       } else {
         finishGame(correct ? score + 1 : score);
       }
