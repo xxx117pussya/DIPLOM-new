@@ -6,7 +6,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 from typing import List, Optional
 import uuid
 from datetime import datetime, timezone, timedelta
@@ -42,6 +42,13 @@ class ChildCreate(BaseModel):
     last_name: str
     middle_name: Optional[str] = ""
 
+    @field_validator('first_name', 'last_name', 'middle_name', mode='before')
+    @classmethod
+    def truncate_name(cls, v):
+        if v and len(v) > 100:
+            return v[:100]
+        return v
+
 class Child(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -71,10 +78,18 @@ class Psychologist(BaseModel):
 class GameResultCreate(BaseModel):
     child_id: str
     game_type: str  # shapes, colors, puzzles, matryoshka, odd_one_out, find_pair, memory, absurdity
-    score: int
-    max_score: int
+    score: int = Field(ge=0)
+    max_score: int = Field(ge=1)
     level: str  # high, medium, low
     details: Optional[dict] = {}
+
+    @field_validator('score')
+    @classmethod
+    def score_not_exceed_max(cls, v, info):
+        max_s = info.data.get('max_score')
+        if max_s is not None and v > max_s:
+            return max_s
+        return v
 
 class GameResult(BaseModel):
     model_config = ConfigDict(extra="ignore")
@@ -201,6 +216,11 @@ async def login_psychologist(input: PsychologistLogin):
 
 @api_router.post("/game/result", response_model=GameResult)
 async def save_game_result(input: GameResultCreate):
+    # Проверка существования ребёнка
+    child = await db.children.find_one({"id": input.child_id}, {"_id": 0})
+    if not child:
+        raise HTTPException(status_code=400, detail="Ребёнок не найден")
+
     result = GameResult(
         child_id=input.child_id,
         game_type=input.game_type,
@@ -269,6 +289,16 @@ async def delete_child_results(child_id: str, _: str = Depends(get_current_psych
     result = await db.game_results.delete_many({"child_id": child_id})
     return {"deleted_count": result.deleted_count, "message": f"Результаты ребёнка удалены"}
 
+@api_router.delete("/child/{child_id}")
+async def delete_child(child_id: str, _: str = Depends(get_current_psychologist)):
+    """Каскадное удаление ребёнка и всех его результатов"""
+    child = await db.children.find_one({"id": child_id}, {"_id": 0})
+    if not child:
+        raise HTTPException(status_code=404, detail="Ребёнок не найден")
+    game_del = await db.game_results.delete_many({"child_id": child_id})
+    await db.children.delete_one({"id": child_id})
+    return {"message": "Ребёнок и все его результаты удалены", "deleted_results": game_del.deleted_count}
+
 @api_router.delete("/game/results/game/{game_type}")
 async def delete_game_results(game_type: str, _: str = Depends(get_current_psychologist)):
     result = await db.game_results.delete_many({"game_type": game_type})
@@ -322,3 +352,17 @@ logger = logging.getLogger(__name__)
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
+
+@app.on_event("startup")
+async def create_indexes():
+    """Создание индексов для производительности запросов"""
+    await db.game_results.create_index("child_id")
+    await db.game_results.create_index("created_at")
+    await db.game_results.create_index("game_type")
+    await db.game_results.create_index([("child_id", 1), ("created_at", -1)])
+    await db.children.create_index(
+        [("last_name", 1), ("first_name", 1), ("middle_name", 1)],
+        unique=True
+    )
+    await db.psychologists.create_index("login", unique=True)
+    logger.info("Database indexes created")
