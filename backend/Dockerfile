@@ -1,4 +1,4 @@
-FROM cr.yandex/mirror/python:3.11-slim
+FROM huecker.io/library/python:3.11-slim
 
 WORKDIR /app
 
