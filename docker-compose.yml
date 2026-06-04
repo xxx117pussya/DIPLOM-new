@@ -1,6 +1,6 @@
 services:
   mongodb:
-    image: cr.yandex/mirror/mongo:7
+    image: mongo:7
     container_name: magic-garden-db
     restart: always
     volumes:
