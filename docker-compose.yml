@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  # ===== MongoDB =====
+  mongodb:
+    image: mongo:7
+    container_name: magic-garden-db
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+
+  # ===== Backend (FastAPI) =====
+  backend:
+    build: ./backend
+    container_name: magic-garden-backend
+    restart: always
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017
+      - DB_NAME=magic_garden
+      - JWT_SECRET=magic-garden-secret-key-2024
+      - CORS_ORIGINS=http://localhost,http://localhost:80
+    ports:
+      - "8000:8000"
+
+  # ===== Frontend (React + Nginx) =====
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        REACT_APP_BACKEND_URL: ""
+    container_name: magic-garden-frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  mongo_data:
