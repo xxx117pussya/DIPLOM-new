@@ -3,8 +3,6 @@ services:
     image: public.ecr.aws/docker/library/mongo:7
     container_name: magic-garden-db
     restart: always
-    volumes:
-      - mongo_data:/data/db
     ports:
       - "27017:27017"
 
@@ -32,6 +30,3 @@ services:
       - backend
     ports:
       - "80:80"
-
-volumes:
-  mongo_data:
