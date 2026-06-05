@@ -1,6 +1,6 @@
 services:
   mongodb:
-    image: mongo:7
+    image: public.ecr.aws/docker/library/mongo:7
     container_name: magic-garden-db
     restart: always
     volumes:
@@ -9,7 +9,9 @@ services:
       - "27017:27017"
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: magic-garden-backend
     restart: always
     depends_on:
@@ -23,8 +25,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      args:
-        REACT_APP_BACKEND_URL: ""
+      dockerfile: Dockerfile
     container_name: magic-garden-frontend
     restart: always
     depends_on:
