@@ -1,10 +1,19 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Depends
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+logger.info("Starting Magic Garden Backend")
+
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
-import logging
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict, field_validator
 from typing import List, Optional
@@ -12,14 +21,22 @@ import uuid
 from datetime import datetime, timezone, timedelta
 import jwt
 import bcrypt
+import asyncio
+import time
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+MONGO_URL = os.environ.get('MONGO_URL')
+DB_NAME = os.environ.get('DB_NAME')
+
+if not MONGO_URL or not DB_NAME:
+    logger.error("MONGO_URL and DB_NAME environment variables are required")
+    raise ValueError("MONGO_URL and DB_NAME environment variables are required")
+
+logger.info("Connecting to MongoDB at %s", MONGO_URL)
+client = AsyncIOMotorClient(MONGO_URL)
+db = client[DB_NAME]
 
 # JWT settings
 JWT_SECRET = os.environ.get('JWT_SECRET', 'magic-garden-secret-key-2024')
@@ -342,20 +359,33 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start = time.time()
+    response = await call_next(request)
+    duration = time.time() - start
+    logger.info("%s %s %s %.3fs", request.method, request.url.path, response.status_code, duration)
+    return response
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
 
 @app.on_event("startup")
-async def create_indexes():
-    """Создание индексов для производительности запросов"""
+async def startup():
+    for attempt in range(30):
+        try:
+            await client.admin.command('ping')
+            logger.info("MongoDB is ready")
+            break
+        except Exception:
+            logger.warning("Waiting for MongoDB... attempt %d/30", attempt + 1)
+            await asyncio.sleep(2)
+    else:
+        logger.error("MongoDB not available after 30 attempts")
+        raise RuntimeError("MongoDB not available")
+
+    logger.info("Creating database indexes...")
     await db.game_results.create_index("child_id")
     await db.game_results.create_index("created_at")
     await db.game_results.create_index("game_type")
