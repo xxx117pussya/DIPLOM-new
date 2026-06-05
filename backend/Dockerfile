@@ -1,7 +1,10 @@
 FROM python:3.11-slim
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    PIP_DISABLE_PIP_VERSION_CHECK=1
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_INDEX_URL=https://mirror.yandex.ru/mirrors/pypi/simple/ \
+    PIP_TRUSTED_HOST=mirror.yandex.ru \
+    PIP_DEFAULT_TIMEOUT=120
 
 WORKDIR /app
 
