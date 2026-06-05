@@ -21,7 +21,7 @@ services:
     environment:
       - MONGO_URL=mongodb://mongodb:27017
       - DB_NAME=magic_garden
-      - JWT_SECRET=${JWT_SECRET:-magic-garden-secret-key-2024}
+      - JWT_SECRET=${JWT_SECRET}
       - CORS_ORIGINS=*
 
   mongodb:
