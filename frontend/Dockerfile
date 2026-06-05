@@ -9,7 +9,7 @@ RUN npm config set registry https://registry.npmmirror.com/ && \
 COPY . .
 
 ENV REACT_APP_BACKEND_URL=""
-RUN npm run build
+RUN npm run build && ls -la /app/build/
 
 FROM nginx:alpine
 
