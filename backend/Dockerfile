@@ -2,13 +2,14 @@ FROM python:3.11-slim
 
 ENV DEBIAN_FRONTEND=noninteractive \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    PIP_INDEX_URL=https://mirror.yandex.ru/mirrors/pypi/simple/ \
-    PIP_TRUSTED_HOST=mirror.yandex.ru \
+    PIP_INDEX_URL=https://mirrors.aliyun.com/pypi/simple/ \
+    PIP_TRUSTED_HOST=mirrors.aliyun.com \
     PIP_DEFAULT_TIMEOUT=120
 
 WORKDIR /app
 
-RUN sed -i 's/deb.debian.org/mirror.yandex.ru/g' /etc/apt/sources.list.d/debian.sources && \
+RUN sed -i 's/deb.debian.org/mirror.yandex.ru/g' /etc/apt/sources.list 2>/dev/null; \
+    sed -i 's/deb.debian.org/mirror.yandex.ru/g' /etc/apt/sources.list.d/*.sources 2>/dev/null; \
     apt-get update && \
     apt-get install -y --no-install-recommends \
         ca-certificates \
@@ -16,7 +17,7 @@ RUN sed -i 's/deb.debian.org/mirror.yandex.ru/g' /etc/apt/sources.list.d/debian.
     rm -rf /var/lib/apt/lists/*
 
 COPY requirements.docker.txt requirements.txt
-RUN python -m pip install --no-cache-dir -r requirements.txt
+RUN python -m pip install --no-cache-dir --timeout 300 -r requirements.txt
 
 COPY server.py .
 
