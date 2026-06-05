@@ -2,9 +2,6 @@ FROM node:18-alpine AS build
 
 WORKDIR /app
 
-RUN npm config set registry http://registry.npmmirror.com/ && \
-    npm config set strict-ssl false
-
 COPY package.json ./
 RUN npm install --legacy-peer-deps --no-audit --no-fund
 
