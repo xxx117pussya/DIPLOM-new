@@ -1,8 +1,14 @@
 services:
-  mongodb:
-    image: mongo:7
-    container_name: magic-garden-db
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: magic-garden-frontend
     restart: always
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
 
   backend:
     build:
@@ -18,13 +24,7 @@ services:
       - JWT_SECRET=magic-garden-secret-key-2024
       - CORS_ORIGINS=*
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: magic-garden-frontend
+  mongodb:
+    image: mongo:7
+    container_name: magic-garden-db
     restart: always
-    depends_on:
-      - backend
-    ports:
-      - "80"
