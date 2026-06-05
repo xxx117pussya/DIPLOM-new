@@ -162,7 +162,7 @@ export default function AbsurdityGame() {
         </p>
       </div>
 
-      {/* КАРТИНКИ */}
+      {/* КАРТИНКИ картинкиии*/}
       <div className="grid grid-cols-3 gap-4 md:gap-6 max-w-lg mx-auto">
         {shuffledImages.map((image) => {
           const isSelected = selectedImages.includes(image.id);
