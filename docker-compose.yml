@@ -1,6 +1,6 @@
 services:
   mongodb:
-    image: public.ecr.aws/docker/library/mongo:7
+    image: mongo:7
     container_name: magic-garden-db
     restart: always
     ports:

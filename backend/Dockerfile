@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/python:3.11-slim
+FROM python:3.11-slim
 
 ENV DEBIAN_FRONTEND=noninteractive \
     PIP_INDEX_URL=http://mirrors.aliyun.com/pypi/simple/ \
