@@ -39,10 +39,7 @@ client = AsyncIOMotorClient(MONGO_URL)
 db = client[DB_NAME]
 
 # JWT settings
-JWT_SECRET = os.environ.get('JWT_SECRET')
-if not JWT_SECRET:
-    logger.error("JWT_SECRET environment variable is required")
-    raise ValueError("JWT_SECRET environment variable is required")
+JWT_SECRET = os.environ.get('JWT_SECRET', 'magic-garden-secret-key-2024')
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRATION_HOURS = 24
 
